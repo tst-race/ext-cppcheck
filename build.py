@@ -42,8 +42,7 @@ if __name__ == "__main__":
     builder.make_dirs(args)
     builder.setup_logger(args)
 
-    arch = "arm64" if "arm" in args.target else "amd64"
-    builder.install_packages(args, [f"libpcre3-dev:{arch}=2:8.39*"])
+    builder.install_packages(args, [("libpcre3-dev", "2:8.39*", True)])
 
     builder.fetch_source(
         args=args,
