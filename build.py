@@ -27,7 +27,13 @@ import race_ext_builder as builder
 
 def get_cli_arguments():
     """Parse command-line arguments to the script"""
-    parser = builder.get_arg_parser("cppcheck", "2.4.1", 1, __file__, [builder.TARGET_LINUX_x86_64, builder.TARGET_LINUX_arm64_v8a])
+    parser = builder.get_arg_parser(
+        "cppcheck",
+        "2.4.1",
+        1,
+        __file__,
+        [builder.TARGET_LINUX_x86_64, builder.TARGET_LINUX_arm64_v8a],
+    )
     return builder.normalize_args(parser.parse_args())
 
 
@@ -49,29 +55,37 @@ if __name__ == "__main__":
     env = builder.create_standard_envvars(args)
 
     logging.root.info("Configuring build")
-    builder.execute(args, [
-        "cmake",
-        f"-H{source_dir}",
-        f"-B{args.build_dir}",
-        f"-DCMAKE_STAGING_PREFIX={args.install_dir}",
-        "-DCMAKE_BUILD_TYPE=Release",
-        "-DUSE_MATCHCOMPILER=yes",
-        "-DHAVE_RULES=yes",
-        "-DBUILD_GUI=no",
-        "-DBUILD_SHARED_LIBS:BOOL=OFF",
-        "-DBUILD_TESTS=no",
-    ], env=env)
+    builder.execute(
+        args,
+        [
+            "cmake",
+            f"-H{source_dir}",
+            f"-B{args.build_dir}",
+            f"-DCMAKE_STAGING_PREFIX={args.install_dir}",
+            "-DCMAKE_BUILD_TYPE=Release",
+            "-DUSE_MATCHCOMPILER=yes",
+            "-DHAVE_RULES=yes",
+            "-DBUILD_GUI=no",
+            "-DBUILD_SHARED_LIBS:BOOL=OFF",
+            "-DBUILD_TESTS=no",
+        ],
+        env=env,
+    )
 
     logging.root.info("Building")
-    builder.execute(args, [
-        "cmake",
-        "--build",
-        args.build_dir,
-        "--target",
-        "install",
-        "--",
-        "-j",
-        args.num_threads,
-    ], env=env)
+    builder.execute(
+        args,
+        [
+            "cmake",
+            "--build",
+            args.build_dir,
+            "--target",
+            "install",
+            "--",
+            "-j",
+            args.num_threads,
+        ],
+        env=env,
+    )
 
     builder.create_package(args)
