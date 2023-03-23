@@ -61,6 +61,7 @@ if __name__ == "__main__":
             f"-H{source_dir}",
             f"-B{args.build_dir}",
             f"-DCMAKE_STAGING_PREFIX={args.install_dir}",
+            f"-DCMAKE_INSTALL_PREFIX={args.install_prefix}",
             "-DCMAKE_BUILD_TYPE=Release",
             "-DUSE_MATCHCOMPILER=yes",
             "-DHAVE_RULES=yes",
@@ -87,4 +88,4 @@ if __name__ == "__main__":
         env=env,
     )
 
-    builder.create_package(args)
+    builder.create_package(args, args.install_prefix)
